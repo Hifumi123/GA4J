@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.hifumi123.ga4j.AbstractIndividual;
+import com.hifumi123.ga4j.exception.NegativeFitnessException;
 
 public class ProportionalModelSelection implements SelectionOperator {
 
@@ -15,11 +16,15 @@ public class ProportionalModelSelection implements SelectionOperator {
 	}
 
 	@Override
-	public List<AbstractIndividual> select(List<AbstractIndividual> individuals) {
+	public List<AbstractIndividual> select(List<AbstractIndividual> individuals) throws NegativeFitnessException {
 		double totalFitness = 0;
 		
-		for (AbstractIndividual individual : individuals)//TODO 适应度为负数时要报错
+		for (AbstractIndividual individual : individuals) {
+			if (individual.getFitness() < 0)
+				throw new NegativeFitnessException("出现负数适应度！");
+			
 			totalFitness += individual.getFitness();
+		}
 		
 		double[] cumulativeFitnesses = new double[individuals.size()];
 		for (int i = 0; i < cumulativeFitnesses.length; i++)

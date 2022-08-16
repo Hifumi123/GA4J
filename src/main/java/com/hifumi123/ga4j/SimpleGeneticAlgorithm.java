@@ -13,9 +13,12 @@ public class SimpleGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	@Override
 	public void run() {
 		generation = 0;
+		bestSoFar = null;
 		initializePopulation();
 		
 		evaluatePopulation();
+		
+		bestSoFar = population.get(searchBestIndividualIndex());
 		
 		if (dataCollector != null)
 			dataCollector.collectData(population, generation);
@@ -26,6 +29,10 @@ public class SimpleGeneticAlgorithm extends AbstractGeneticAlgorithm {
 			generateNewPopulation();
 			
 			evaluatePopulation();
+			
+			AbstractIndividual bestCandidate = population.get(searchBestIndividualIndex());
+			if (bestCandidate.getFitness() > bestSoFar.getFitness())
+				bestSoFar = bestCandidate;
 			
 			if (dataCollector != null)
 				dataCollector.collectData(population, generation);

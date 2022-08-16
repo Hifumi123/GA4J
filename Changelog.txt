@@ -1,3 +1,5 @@
 0.2.0 相对 0.1.0 的改动：
 1、删除 AbstractGeneticAlgorithm 的 getBestFitnessList 和 getMeanFitnessList 方法。现在所有统计数据全部使用 DataCollector 获得，算法不再提供。
 2、POM 文件中增加 maven-source-plugin 配置。
+3、修复适应度为负数时算法运行不正常的错误。现在，适应度为负数时会抛出异常。
+4、AbstractGeneticAlgorithm 的 getBestIndividual 方法现在返回的是所有代中适应度最好的个体，而不是最后一代中适应度最好的个体。此修正不会影响 ElitistModelGeneticAlgorithm 的运行结果，因为其最后一代中适应度最好的个体就是所有代中适应度最好的个体。

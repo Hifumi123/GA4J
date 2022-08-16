@@ -67,4 +67,9 @@ public class ElitistModelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 				dataCollector.collectData(population, generation);
 		}
 	}
+
+	@Override
+	public AbstractIndividual getBestIndividual() {
+		return bestIndividualSoFar;
+	}
 }

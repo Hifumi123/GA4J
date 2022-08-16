@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hifumi123.ga4j.crossover.CrossoverOperator;
+import com.hifumi123.ga4j.exception.NegativeFitnessException;
 import com.hifumi123.ga4j.mutation.MutationOperator;
 import com.hifumi123.ga4j.selection.SelectionOperator;
 
@@ -32,6 +33,8 @@ public abstract class AbstractGeneticAlgorithm {
 	protected int generation;
 	
 	protected List<AbstractIndividual> population;
+	
+	protected AbstractIndividual bestSoFar;
 
 	public AbstractGeneticAlgorithm(int populationSize, int maxGeneration, double probabilityOfCrossover, double probabilityOfMutation, IndividualGenerator individualGenerator, Evaluator evaluator, SelectionOperator selection, CrossoverOperator crossover, MutationOperator mutation) {
 		this.populationSize = populationSize;
@@ -57,7 +60,11 @@ public abstract class AbstractGeneticAlgorithm {
 	}
 	
 	protected void generateNewPopulation() {
-		population = selection.select(population);
+		try {
+			population = selection.select(population);
+		} catch (NegativeFitnessException e) {
+			e.printStackTrace();
+		}
 		
 		crossover.cross(population, probabilityOfCrossover);
 		
@@ -77,9 +84,7 @@ public abstract class AbstractGeneticAlgorithm {
 	}
 	
 	public AbstractIndividual getBestIndividual() {
-		int index = searchBestIndividualIndex();
-		
-		return population.get(index);//TODO 应该返回所有代中的最好个体
+		return bestSoFar;
 	}
 
 	public void setDataCollector(DataCollector dataCollector) {
