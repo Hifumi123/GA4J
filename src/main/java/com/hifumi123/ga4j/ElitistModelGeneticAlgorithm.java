@@ -33,13 +33,11 @@ public class ElitistModelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	public void run() {
 		generation = 0;
 		initializePopulation();
-		initializeStatisticalData();
 		
 		evaluatePopulation();
 		
 		bestIndividualIndex = searchBestIndividualIndex();
 		
-		makeStatistics();
 		if (dataCollector != null)
 			dataCollector.collectData(population, generation);
 		
@@ -65,7 +63,6 @@ public class ElitistModelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 				e.printStackTrace();
 			}
 			
-			makeStatistics();
 			if (dataCollector != null)
 				dataCollector.collectData(population, generation);
 		}

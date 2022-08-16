@@ -32,10 +32,6 @@ public abstract class AbstractGeneticAlgorithm {
 	protected int generation;
 	
 	protected List<AbstractIndividual> population;
-	
-	protected List<Double> bestFitnessList;
-	
-	protected List<Double> meanFitnessList;
 
 	public AbstractGeneticAlgorithm(int populationSize, int maxGeneration, double probabilityOfCrossover, double probabilityOfMutation, IndividualGenerator individualGenerator, Evaluator evaluator, SelectionOperator selection, CrossoverOperator crossover, MutationOperator mutation) {
 		this.populationSize = populationSize;
@@ -55,31 +51,9 @@ public abstract class AbstractGeneticAlgorithm {
 			population.add(individualGenerator.generateIndividual());
 	}
 	
-	protected void initializeStatisticalData() {
-		bestFitnessList = new ArrayList<Double>(maxGeneration + 1);
-		meanFitnessList = new ArrayList<Double>(maxGeneration + 1);
-	}
-	
 	protected void evaluatePopulation() {
 		for (int i = 0; i < population.size(); i++)
 			evaluator.evaluate(population.get(i));
-	}
-	
-	protected void makeStatistics() {
-		double best = population.get(0).getFitness();
-		double sum = population.get(0).getFitness();
-		
-		for (int i = 1; i < population.size(); i++) {
-			double f = population.get(i).getFitness();
-			
-			if (f > best)
-				best = f;
-			
-			sum += f;
-		}
-		
-		bestFitnessList.add(best);
-		meanFitnessList.add(sum / populationSize);
 	}
 	
 	protected void generateNewPopulation() {
@@ -105,15 +79,7 @@ public abstract class AbstractGeneticAlgorithm {
 	public AbstractIndividual getBestIndividual() {
 		int index = searchBestIndividualIndex();
 		
-		return population.get(index);
-	}
-
-	public List<Double> getBestFitnessList() {
-		return bestFitnessList;
-	}
-
-	public List<Double> getMeanFitnessList() {
-		return meanFitnessList;
+		return population.get(index);//TODO 应该返回所有代中的最好个体
 	}
 
 	public void setDataCollector(DataCollector dataCollector) {

@@ -18,7 +18,7 @@ public class ProportionalModelSelection implements SelectionOperator {
 	public List<AbstractIndividual> select(List<AbstractIndividual> individuals) {
 		double totalFitness = 0;
 		
-		for (AbstractIndividual individual : individuals)
+		for (AbstractIndividual individual : individuals)//TODO 适应度为负数时要报错
 			totalFitness += individual.getFitness();
 		
 		double[] cumulativeFitnesses = new double[individuals.size()];

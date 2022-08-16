@@ -14,11 +14,9 @@ public class SimpleGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	public void run() {
 		generation = 0;
 		initializePopulation();
-		initializeStatisticalData();
 		
 		evaluatePopulation();
 		
-		makeStatistics();
 		if (dataCollector != null)
 			dataCollector.collectData(population, generation);
 		
@@ -29,7 +27,6 @@ public class SimpleGeneticAlgorithm extends AbstractGeneticAlgorithm {
 			
 			evaluatePopulation();
 			
-			makeStatistics();
 			if (dataCollector != null)
 				dataCollector.collectData(population, generation);
 		}
