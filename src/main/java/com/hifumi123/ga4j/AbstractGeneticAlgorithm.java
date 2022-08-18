@@ -60,15 +60,15 @@ public abstract class AbstractGeneticAlgorithm {
 	}
 	
 	protected void generateNewPopulation() {
-		try {
-			population = selection.select(population);
-		} catch (NegativeFitnessException e) {
-			e.printStackTrace();
-		}
+		//try {
+			//population = selection.select(population);
+		//} catch (NegativeFitnessException e) {
+			//e.printStackTrace();
+		//}
 		
-		crossover.cross(population, probabilityOfCrossover);
+		//crossover.cross(population, probabilityOfCrossover);
 		
-		mutation.mutate(population, probabilityOfMutation);
+		//mutation.mutate(population, probabilityOfMutation);
 	}
 	
 	public abstract void run();

@@ -1,9 +1,9 @@
 package com.hifumi123.ga4j.crossover;
 
-import java.util.List;
 import java.util.Random;
 
 import com.hifumi123.ga4j.AbstractIndividual;
+import com.hifumi123.ga4j.Population;
 
 public class OnePointCrossover implements CrossoverOperator {
 
@@ -14,8 +14,8 @@ public class OnePointCrossover implements CrossoverOperator {
 	}
 	
 	@Override
-	public void cross(List<AbstractIndividual> individuals, double probabilityOfCrossover) {
-		int[] indexs = new int[individuals.size()];
+	public void cross(Population population, double probabilityOfCrossover) {
+		int[] indexs = new int[population.sizeOfEvolvingGroup()];
 		for (int i = 0; i < indexs.length; i++)
 			indexs[i] = i;
 		
@@ -28,7 +28,7 @@ public class OnePointCrossover implements CrossoverOperator {
 		}
 		
 		for (int i = 0; i < indexs.length - 1; i += 2)
-			crossPairOfIndividuals(individuals.get(indexs[i]), individuals.get(indexs[i + 1]), probabilityOfCrossover);
+			crossPairOfIndividuals(population.getFromEvolvingGroup(indexs[i]), population.getFromEvolvingGroup(indexs[i + 1]), probabilityOfCrossover);
 	}
 	
 	private void crossPairOfIndividuals(AbstractIndividual i1, AbstractIndividual i2, double probabilityOfCrossover) {

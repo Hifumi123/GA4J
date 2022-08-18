@@ -1,10 +1,8 @@
 package com.hifumi123.ga4j.crossover;
 
-import java.util.List;
-
-import com.hifumi123.ga4j.AbstractIndividual;
+import com.hifumi123.ga4j.Population;
 
 public interface CrossoverOperator {
-
-	public void cross(List<AbstractIndividual> individuals, double probabilityOfCrossover);
+	
+	public void cross(Population population, double probabilityOfCrossover);
 }
