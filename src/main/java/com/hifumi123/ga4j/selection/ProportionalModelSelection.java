@@ -17,7 +17,10 @@ public class ProportionalModelSelection implements SelectionOperator {
 	}
 	
 	@Override
-	public void select(Population population) throws NegativeFitnessException {
+	public void protect(Population population) {}
+	
+	@Override
+	public List<AbstractIndividual> select(Population population, int n) throws NegativeFitnessException {
 		double totalFitness = 0;
 		
 		for (int i = 0; i < population.sizeOfEvolvingGroup(); i++) {
@@ -36,18 +39,18 @@ public class ProportionalModelSelection implements SelectionOperator {
 		for (int i = 1; i < cumulativeFitnesses.length; i++)
 			cumulativeFitnesses[i] += cumulativeFitnesses[i - 1];
 		
-		List<AbstractIndividual> newGroup = new ArrayList<AbstractIndividual>(population.sizeOfEvolvingGroup());
-		for (int i = 0; i < population.sizeOfEvolvingGroup(); i++) {
+		List<AbstractIndividual> list = new ArrayList<AbstractIndividual>(n);
+		for (int i = 0; i < n; i++) {
 			int index = selectOne(cumulativeFitnesses);
 			
 			try {
-				newGroup.add((AbstractIndividual) population.getFromEvolvingGroup(index).clone());
+				list.add((AbstractIndividual) population.getFromEvolvingGroup(index).clone());
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		population.replaceEvolvingGroup(newGroup);
+		return list;
 	}
 	
 	@Override

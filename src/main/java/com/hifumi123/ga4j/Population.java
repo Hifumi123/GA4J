@@ -76,8 +76,8 @@ public class Population {
 		return remainedIndividualList.size();
 	}
 	
-	public void addToRemainedGroup(AbstractIndividual individual) {
-		remainedIndividualList.add(individual);
+	public boolean addToRemainedGroup(AbstractIndividual individual) {
+		return remainedIndividualList.add(individual);
 	}
 	
 	public AbstractIndividual getFromRemainedGroup(int index) {
@@ -92,8 +92,12 @@ public class Population {
 		return evolvingIndividualList.size();
 	}
 
-	public void addToEvolvingGroup(AbstractIndividual individual) {
-		evolvingIndividualList.add(individual);
+	public boolean addToEvolvingGroup(AbstractIndividual individual) {
+		return evolvingIndividualList.add(individual);
+	}
+	
+	public boolean addAllToEvolvingGroup(List<AbstractIndividual> list) {
+		return evolvingIndividualList.addAll(list);
 	}
 
 	public AbstractIndividual getFromEvolvingGroup(int index) {
@@ -102,6 +106,10 @@ public class Population {
 	
 	public AbstractIndividual removeFromEvolvingGroup(int index) {
 		return evolvingIndividualList.remove(index);
+	}
+	
+	public void clearEvolvingGroup() {
+		evolvingIndividualList.clear();
 	}
 	
 	private int searchBestIndividualIndexInList(List<AbstractIndividual> list) {
@@ -134,9 +142,5 @@ public class Population {
 	
 	public int searchWorstIndividualIndexInEvolvingGroup() {
 		return searchWorstIndividualIndexInList(evolvingIndividualList);
-	}
-
-	public void replaceEvolvingGroup(List<AbstractIndividual> newGroup) {
-		evolvingIndividualList = newGroup;
 	}
 }

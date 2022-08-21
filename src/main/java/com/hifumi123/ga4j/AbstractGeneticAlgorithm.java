@@ -1,6 +1,5 @@
 package com.hifumi123.ga4j;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.hifumi123.ga4j.crossover.CrossoverOperator;
@@ -14,76 +13,108 @@ public abstract class AbstractGeneticAlgorithm {
 	
 	protected int maxGeneration;
 	
-	private double probabilityOfCrossover;
+	protected double probabilityOfCrossover;
 	
-	private double probabilityOfMutation;
+	protected double probabilityOfMutation;
 	
-	private IndividualGenerator individualGenerator;
+	protected IndividualGenerator individualGenerator;
 	
-	private Evaluator evaluator;
+	protected Evaluator evaluator;
 	
-	private SelectionOperator selection;
+	protected SelectionOperator selection;
 	
-	private CrossoverOperator crossover;
+	protected CrossoverOperator crossover;
 	
-	private MutationOperator mutation;
+	protected MutationOperator mutation;
 	
-	protected DataCollector dataCollector;
+	private DataCollector dataCollector;
 	
-	protected int generation;
+	private int generation;
 	
-	protected List<AbstractIndividual> population;
+	protected Population population;
 	
-	protected AbstractIndividual bestSoFar;
-
-	public AbstractGeneticAlgorithm(int populationSize, int maxGeneration, double probabilityOfCrossover, double probabilityOfMutation, IndividualGenerator individualGenerator, Evaluator evaluator, SelectionOperator selection, CrossoverOperator crossover, MutationOperator mutation) {
-		this.populationSize = populationSize;
-		this.maxGeneration = maxGeneration;
-		this.probabilityOfCrossover = probabilityOfCrossover;
-		this.probabilityOfMutation = probabilityOfMutation;
-		this.individualGenerator = individualGenerator;
-		this.evaluator = evaluator;
-		this.selection = selection;
-		this.crossover = crossover;
-		this.mutation = mutation;
-	}
+	private AbstractIndividual bestSoFar;
 	
-	protected void initializePopulation() {
-		population = new ArrayList<AbstractIndividual>(populationSize);
+	private void initializePopulation() {
+		population = new Population();
 		for (int i = 0; i < populationSize; i++)
-			population.add(individualGenerator.generateIndividual());
+			population.addToEvolvingGroup(individualGenerator.generateIndividual());
 	}
 	
-	protected void evaluatePopulation() {
-		for (int i = 0; i < population.size(); i++)
-			evaluator.evaluate(population.get(i));
+	protected void initialize() {
+		generation = 0;
+		bestSoFar = null;
+		initializePopulation();
 	}
 	
-	protected void generateNewPopulation() {
-		//try {
-			//population = selection.select(population);
-		//} catch (NegativeFitnessException e) {
-			//e.printStackTrace();
-		//}
-		
-		//crossover.cross(population, probabilityOfCrossover);
-		
-		//mutation.mutate(population, probabilityOfMutation);
+	protected void evaluate() {
+		for (int i = 0; i < population.sizeOfEvolvingGroup(); i++)
+			evaluator.evaluate(population.getFromEvolvingGroup(i));
 	}
 	
-	public abstract void run();
-	
-	protected int searchBestIndividualIndex() {
-		int bestIndividualIndex = 0;
-		
-		for (int i = 1; i < population.size(); i++)
-			if (population.get(i).getFitness() > population.get(bestIndividualIndex).getFitness())
-				bestIndividualIndex = i;
-		
-		return bestIndividualIndex;
+	protected void beforeGenerateNewPopulation() {
+		selection.protect(population);
 	}
 	
-	public AbstractIndividual getBestIndividual() {
+	protected void select() {
+		try {
+			List<AbstractIndividual> list = selection.select(population, population.sizeOfEvolvingGroup());
+			population.clearEvolvingGroup();
+			population.addAllToEvolvingGroup(list);
+		} catch (NegativeFitnessException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	protected void cross() {
+		crossover.cross(population, probabilityOfCrossover);
+	}
+	
+	protected void mutate() {
+		mutation.mutate(population, probabilityOfMutation, 0, population.sizeOfEvolvingGroup());
+	}
+	
+	protected void afterGenerateNewPopulation() {
+		selection.survival(population);
+	}
+	
+	protected void finish() {}
+	
+	public AbstractIndividual run() {
+		initialize();
+		
+		evaluate();
+		
+		bestSoFar = population.searchBestIndividual();
+		
+		if (dataCollector != null)
+			dataCollector.collectData(population, generation);
+		
+		while (generation < maxGeneration) {
+			generation++;
+			
+			beforeGenerateNewPopulation();
+			
+			select();
+			
+			cross();
+			
+			mutate();
+			
+			evaluate();
+			
+			afterGenerateNewPopulation();
+			
+			AbstractIndividual bestCandidate = population.searchBestIndividual();
+			if (bestCandidate.getFitness() > bestSoFar.getFitness())
+				bestSoFar = bestCandidate;
+			
+			if (dataCollector != null)
+				dataCollector.collectData(population, generation);
+		}
+		
+		finish();
+		
 		return bestSoFar;
 	}
 

@@ -4,5 +4,5 @@ import com.hifumi123.ga4j.Population;
 
 public interface MutationOperator {
 	
-	public void mutate(Population population, double probabilityOfMutation);
+	public void mutate(Population population, double probabilityOfMutation, int startIndex, int endIndex);
 }

@@ -14,8 +14,8 @@ public class SimpleMutation implements MutationOperator {
 	}
 
 	@Override
-	public void mutate(Population population, double probabilityOfMutation) {
-		for (int i = 0; i < population.sizeOfEvolvingGroup(); i++) {
+	public void mutate(Population population, double probabilityOfMutation, int startIndex, int endIndex) {
+		for (int i = startIndex; i < endIndex; i++) {
 			AbstractIndividual individual = population.getFromEvolvingGroup(i);
 			
 			for (int j = 0; j < individual.getChromosome().getLength(); j++) {
