@@ -53,6 +53,8 @@ public class StandardParallelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	
 	private int[] indexesOfPopulationForThreads;
 	
+	private Evaluator[] evaluatorsForThreads;
+	
 	public StandardParallelGeneticAlgorithm(int populationSize, int maxGeneration, double probabilityOfCrossover, double probabilityOfMutation, IndividualGenerator individualGenerator, Evaluator evaluator, SelectionOperator selection, CrossoverOperator crossover, MutationOperator mutation, int nThreads) {
 		this.populationSize = populationSize;
 		this.maxGeneration = maxGeneration;
@@ -86,6 +88,17 @@ public class StandardParallelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 			indexesOfPopulationForThreads[i] += indexesOfPopulationForThreads[i - 1];
 	}
 	
+	private void initializeEvaluatorsForThreads() {
+		evaluatorsForThreads = new Evaluator[nThreads];
+		evaluatorsForThreads[0] = evaluator;
+		for (int i = 1; i < evaluatorsForThreads.length; i++)
+			try {
+				evaluatorsForThreads[i] = (Evaluator) evaluator.clone();
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+	}
+	
 	@Override
 	protected void initialize() {
 		super.initialize();
@@ -93,6 +106,8 @@ public class StandardParallelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		exec = Executors.newFixedThreadPool(nThreads);
 		
 		generateArraysForThreads();
+		
+		initializeEvaluatorsForThreads();
 	}
 	
 	private void parallelEvaluate() {
@@ -101,13 +116,14 @@ public class StandardParallelGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		for (int i = 0; i < nThreads; i++) {
 			int startIndex = indexesOfPopulationForThreads[i];
 			int endIndex = indexesOfPopulationForThreads[i + 1];
+			Evaluator evaluatorForThread = evaluatorsForThreads[i];
 			
 			exec.execute(new Runnable() {
 				
 				@Override
 				public void run() {
 					for (int j = startIndex; j < endIndex; j++)
-						evaluator.evaluate(population.getFromEvolvingGroup(j));
+						evaluatorForThread.evaluate(population.getFromEvolvingGroup(j));
 					
 					latch.countDown();
 				}

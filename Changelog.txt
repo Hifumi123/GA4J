@@ -13,4 +13,5 @@
 12、新增 ElitistProportionalModelSelection 类，实现能够保存最优的比例选择。
 13、修改 CrossoverOperator 中的 cross 方法的定义，以适应新的 Population 类。
 14、修改 MutationOperator 中的 mutate 方法的定义，以适应新的 Population 类和 StandardParallelGeneticAlgorithm 类。
-15、修改 DataCollector 中的 collectData 方法的定义，以适用新的 Population 类。
+15、Evaluator 接口继承 Cloneable 接口，并定义 clone 方法，以适应新的 StandardParallelGeneticAlgorithm 类。
+16、修改 DataCollector 中的 collectData 方法的定义，以适用新的 Population 类。
