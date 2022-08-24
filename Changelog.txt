@@ -15,3 +15,5 @@
 14、修改 MutationOperator 中的 mutate 方法的定义，以适应新的 Population 类和 StandardParallelGeneticAlgorithm 类。
 15、Evaluator 接口继承 Cloneable 接口，并定义 clone 方法，以适应新的 StandardParallelGeneticAlgorithm 类。
 16、修改 DataCollector 中的 collectData 方法的定义，以适用新的 Population 类。
+17、GrayCodeChromosome 类添加新的构造方法，允许设置基因数组。
+18、修复 GrayCodeChromosome 类的 decode 方法解码错误的问题。
