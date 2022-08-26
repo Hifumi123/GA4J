@@ -1,5 +1,5 @@
 0.2.0 相对 0.1.0 的改动：
-1、POM 文件中增加 maven-source-plugin 配置。
+1、POM 文件中增加 maven-source-plugin 插件配置。
 2、重写 AbstractGeneticAlgorithm 类，重新设计遗传算法流程框架。
 3、删除 AbstractGeneticAlgorithm 的 getBestFitnessList 和 getMeanFitnessList 方法。现在所有统计数据全部使用 DataCollector 获得，算法不再提供。
 4、删除 AbstractGeneticAlgorithm 的 getBestIndividual 方法。现在由 run 方法返回运行结果，并且现在返回的是所有代中适应度最好的个体，而不是最后一代中适应度最好的个体。
@@ -17,3 +17,6 @@
 16、修改 DataCollector 中的 collectData 方法的定义，以适用新的 Population 类。
 17、GrayCodeChromosome 类添加新的构造方法，允许设置基因数组。
 18、修复 GrayCodeChromosome 类的 decode 方法解码错误的问题。
+19、POM 文件中增加 JUnit 依赖和 maven-surefire-plugin 插件配置以支持单元测试。
+20、为 BinaryChromosome 添加单元测试。
+21、为 GrayCodeChromosome 添加单元测试。
