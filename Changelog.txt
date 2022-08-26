@@ -20,3 +20,4 @@
 19、POM 文件中增加 JUnit 依赖和 maven-surefire-plugin 插件配置以支持单元测试。
 20、为 BinaryChromosome 添加单元测试。
 21、为 GrayCodeChromosome 添加单元测试。
+22、补充完善 README 文档。
